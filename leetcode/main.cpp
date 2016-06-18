@@ -2,7 +2,7 @@
 //  main.cpp
 //  leetcode
 //
-//  Created by Ying Chen on 2016-06-12.
+//  Created by Ying Ying Chen on 2016-06-12.
 //  Copyright © 2016 Mia Chen. All rights reserved.
 //
 
