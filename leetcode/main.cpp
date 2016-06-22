@@ -11,6 +11,17 @@
 #include <unordered_map>
 #include <algorithm>
 
+struct listnode
+{
+    int value;
+    listnode* next;
+    listnode(int x)
+    {
+        value = x;
+        next = nullptr;
+    }
+};
+
 class solution
 {
 public:
@@ -387,9 +398,93 @@ public:
         return one;
     }
     
+    static listnode * addtwonumbers(listnode * list1,listnode * list2)
+    {
+        listnode * resultlist = nullptr;
+        int carry = 0;
+        int value = 0;
+        listnode * lastnode = nullptr;
+        listnode * listnode1 = nullptr;
+        listnode * listnode2 = nullptr;
+        
+        for(listnode1 = list1,  listnode2 = list2;
+            listnode1||listnode2;
+            listnode1? listnode1 = listnode1->next:listnode1 = nullptr, listnode2? listnode2 = listnode2->next:listnode2 = nullptr)
+        {
+            if(listnode1 && listnode2)
+            {
+                value = (listnode1->value + listnode2->value + carry)%10;
+                carry = (listnode1->value + listnode2->value + carry)/10;
+            }
+            else
+            {
+                value = listnode1?((listnode1->value + carry)%10): ((listnode2->value + carry)%10);
+                carry = listnode1?((listnode1->value + carry)/10): ((listnode2->value + carry)/10);
+            }
+                
+            
+            if(resultlist == nullptr)
+            {
+                resultlist = new listnode(value);
+                lastnode = resultlist;
+            }
+            else
+            {
+                lastnode->next = new listnode(value);
+                lastnode = lastnode->next;
+            }
+        }
+        
+        if(carry != 0)
+        {
+            lastnode->next = new listnode(carry);
+        }
+        
+        return resultlist;
+    }
+
+
+static listnode * reverselikedlistII(listnode * inputlist, int m, int n)
+{
+    listnode * mnode= nullptr;
+    listnode * prevmnode= nullptr;
+    listnode * prevnode = nullptr;
+    listnode * origialnext = nullptr;
+    
+    int i = 0;
+    
+    for(listnode * node = inputlist; node != nullptr; node = origialnext)
+    {
+        i++;
+        origialnext = node->next;
+        
+        if(i == m)
+        {
+            prevmnode = prevnode;
+            mnode = node;
+        }
+        
+        if(i >= m+1 && i <= n)
+        {
+            node->next = prevnode;
+        }
+        
+        if(i == n)
+        {
+            mnode->next = origialnext;
+            prevmnode->next = node;
+        }
+        
+        prevnode = node;
+    }
+    return inputlist;
+}
+    
+    
 };
 
-int main(int argc, const char * argv[]) {
+int main(int argc, const char * argv[])
+{
     // insert code here...
 #if 0
     std::vector<int> array = {2,3,4,4,4,5,6,6,7};
@@ -459,7 +554,7 @@ int main(int argc, const char * argv[]) {
     std::vector<std::vector<int>> gridresultvecot;
     gridresultvecot = solution::getLockerDistanceGrid(7,5,lockerx,lockery);
     
-    std::cout<<"gird: \n";
+    std::cout<<"grid: \n";
     
     for(int i = 0; i< 7;i++)
     {
@@ -469,10 +564,43 @@ int main(int argc, const char * argv[]) {
         }
         std::cout << ",\n";
     }
-#endif
+
     
     std::vector<int> singleonevector = {1,2,3,4,2,3,1,3,2,1};
     std::cout <<"single number II:"<< solution::singlenumberII(singleonevector) <<"\n";
+    
+    listnode * inputlist1 = new listnode(5);
+    inputlist1->next = new listnode(6);
+    inputlist1->next->next = new listnode(4);
+    
+    listnode* inputlist2 = new listnode(2);
+    inputlist2->next = new listnode(4);
+    inputlist2->next->next = new listnode(9);
+    inputlist2->next->next->next = new listnode(9);
+    
+    listnode * resultlist = solution::addtwonumbers(inputlist1, inputlist2);
+    
+    std::cout << "list add number: ";
+    for(listnode * l = resultlist; l; l = l->next)
+    {
+        std::cout << l->value << ",";
+    }
+    std::cout<<"\n";
+#endif
+    
+    listnode* inputlist3 = new listnode(1);
+    inputlist3->next = new listnode(2);
+    inputlist3->next->next = new listnode(3);
+    inputlist3->next->next->next = new listnode(4);
+    inputlist3->next->next->next->next = new listnode(5);
+    
+    listnode *  resultlist = solution::reverselikedlistII(inputlist3,2,4);
+    std::cout << "reverse linked list II: ";
+    for(listnode * l = resultlist; l; l = l->next)
+    {
+        std::cout << l->value << ",";
+    }
+    std::cout<<"\n";
 
     return 0;
 }
